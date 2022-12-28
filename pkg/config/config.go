@@ -17,7 +17,7 @@ func getenv(name string) string {
 
 func NewConfig() *Config {
 	return &Config{
-		database: getenv("DATABASE"),
+		database: getenv("DATABASE_URL"),
 		port:     getenv("PORT"),
 	}
 }
