@@ -38,3 +38,23 @@ func TestGetExpenseByIDApi(t *testing.T) {
 	assert.Equal(t, createExpense.Note, e.Note)
 	assert.Equal(t, createExpense.Tags, e.Tags)
 }
+
+func TestGetExpensesAll(t *testing.T) {
+
+	var e []Expense
+	res := request(http.MethodGet, uri("expenses"), nil)
+	err := res.Decode(&e) // ใช้ decode ข้อมูลที่ได้จาก response body มาเก็บไว้ในตัวแปร u
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusCreated, res.StatusCode)
+
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+	// for _, v := range e {
+	// 	assert.Equal(t, , v.ID)
+	// }
+	// assert.Equal(t, createExpense.ID, e.ID)
+	// assert.Equal(t, createExpense.Title, e.Title)
+	// assert.Equal(t, createExpense.Amount, e.Amount)
+	// assert.Equal(t, createExpense.Note, e.Note)
+	// assert.Equal(t, createExpense.Tags, e.Tags)
+}
