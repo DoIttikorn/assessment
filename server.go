@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/subtle"
 	"fmt"
 	"log"
 	"os"
@@ -32,7 +33,8 @@ func main() {
 
 	g := e.Group("expenses")
 	g.POST("", expense.CreateExpense)
-	g.PUT("/:id", expense.UpdateExpense)
+	g.PUT("/:id", expense.UpdateExpenseByID)
+	g.GET("", expense.GetExpensesAll, middleware.BasicAuth(basicAuth))
 	g.GET("/:id", expense.GetExpenseByID)
 
 	// graceful shutdown
@@ -58,4 +60,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+}
+
+// basic auth middleware
+func basicAuth(username, password string, c echo.Context) (bool, error) {
+	// Be careful to use constant time comparison to prevent timing attacks
+	if subtle.ConstantTimeCompare([]byte(username), []byte("username")) == 1 &&
+		subtle.ConstantTimeCompare([]byte(password), []byte("password")) == 1 {
+		return true, nil
+	}
+	return false, nil
 }

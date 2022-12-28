@@ -19,10 +19,20 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: go-expense-db
+      POSTGRES_DB: expenses
     restart: always
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
     networks:
       - expense-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - expense-network
+    depends_on:
+      - db
     

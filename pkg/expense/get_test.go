@@ -113,3 +113,40 @@ func TestGetExpenseByIdDBError(t *testing.T) {
 	}
 
 }
+
+func TestGetExpensesAllSuccess(t *testing.T) {
+
+	// Arrange
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+
+	getMockRows := sqlmock.NewRows([]string{"ID", "Title", "Amount", "Note", "Tags"}).
+		AddRow("1", "test-title", 1000.00, "test-node", pq.Array([]string{"dodo", "learn"})).
+		AddRow("2", "test-title", 1000.00, "test-node", pq.Array([]string{"dodo", "learn"}))
+
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+
+	mock.ExpectQuery("SELECT (.+) FROM expenses").
+		WillReturnRows(getMockRows)
+
+	h := handler{db}
+	c := e.NewContext(req, rec)
+	c.SetPath("/expense")
+	expected := "[{\"id\":1,\"title\":\"test-title\",\"amount\":1000,\"note\":\"test-node\",\"tags\":[\"dodo\",\"learn\"]},{\"id\":2,\"title\":\"test-title\",\"amount\":1000,\"note\":\"test-node\",\"tags\":[\"dodo\",\"learn\"]}]"
+
+	// Act
+	err = h.GetExpensesAll(c)
+
+	// Assertions
+	if assert.NoError(t, err) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, expected, strings.TrimSpace(rec.Body.String()))
+	}
+
+}

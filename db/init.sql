@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS expenses (
     tags TEXT []
 );
 
-INSERT INTO TABLE expenses (title, amount, note, tags) VALUES ('Rent', 1000, 'Rent for the month of May', ARRAY['rent', 'housing']);
+INSERT INTO expenses (title, amount, note, tags) VALUES ('Rent', 1000, 'Rent for the month of May', ARRAY['rent', 'housing']);

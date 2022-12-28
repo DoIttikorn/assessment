@@ -19,3 +19,21 @@ func (h *handler) GetExpenseByID(echo echo.Context) error {
 	}
 	return echo.JSON(http.StatusOK, e)
 }
+
+func (h *handler) GetExpensesAll(echo echo.Context) error {
+	var expenses []Expense
+	rows, err := h.DB.Query("SELECT id, title, amount, note, tags FROM expenses")
+	if err != nil {
+		return echo.JSON(http.StatusInternalServerError, Error{Message: "Error getting all expenses"})
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var e Expense
+		err := rows.Scan(&e.ID, &e.Title, &e.Amount, &e.Note, pq.Array(&e.Tags))
+		if err != nil {
+			return echo.JSON(http.StatusInternalServerError, Error{Message: "Error getting all expenses"})
+		}
+		expenses = append(expenses, e)
+	}
+	return echo.JSON(http.StatusOK, expenses)
+}
