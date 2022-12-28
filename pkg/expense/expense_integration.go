@@ -38,6 +38,7 @@ func setupServer(t *testing.T) *echo.Echo {
 		e.GET("/expenses/:id", expense.GetExpenseByID)
 		e.GET("/expenses", expense.GetExpensesAll)
 		e.POST("/expenses", expense.CreateExpense)
+		e.PUT("/expenses/:id", expense.UpdateExpenseByID)
 		e.DELETE("/expenses/:id", expense.DeleteExpenseByID)
 
 		e.Start(fmt.Sprintf(":%d", serverPort))

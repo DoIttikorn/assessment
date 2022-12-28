@@ -5,47 +5,21 @@ package expense
 
 import (
 	"bytes"
-	"database/sql"
 	"fmt"
-	"log"
-	"net"
 	"net/http"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestUpdateExpenseByIdSuccess(t *testing.T) {
 
-	eh := echo.New()
-	go func(e *echo.Echo) {
-		db, err := sql.Open("postgres", "postgresql://root:root@db/go-example-db?sslmode=disable")
-		if err != nil {
-			log.Fatal(err)
-		}
+	// setup echo server
+	eh := setupServer(t)
+	pingServer()
 
-		h := NewApplication(db)
-
-		e.POST("/expenses", h.CreateExpense)
-		e.PUT("/expenses/:id", h.UpdateExpenseByID)
-		e.Start(fmt.Sprintf(":%d", serverPort))
-	}(eh)
-
-	for {
-		conn, err := net.DialTimeout("tcp", fmt.Sprintf("localhost:%d", serverPort), 30*time.Second)
-		if err != nil {
-			log.Println(err)
-		}
-		if conn != nil {
-			conn.Close()
-			break
-		}
-	}
-
-	// Create for update
+	// setup data for update
 	bodyCreate := `{
 		"title":"market",
 		"amount": 100.00,
@@ -57,11 +31,12 @@ func TestUpdateExpenseByIdSuccess(t *testing.T) {
 	res := request(t, http.MethodPost, uri(fmt.Sprint(serverPort), "expenses"), strings.NewReader(bodyCreate))
 	assert.Nil(t, res.err)
 
+	// check create data
 	err := res.Decode(&createExpense)
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusCreated, res.StatusCode)
 
-	// Update
+	// start update case
 	body := bytes.NewBufferString(`{
 		"title":"pay market",
 		"amount": 9999.00,
@@ -81,5 +56,13 @@ func TestUpdateExpenseByIdSuccess(t *testing.T) {
 	assert.Equal(t, update.Amount, 9999.00)
 	assert.Equal(t, update.Note, "clear debt")
 	assert.Equal(t, update.Tags, []string{"markets", "debt"})
+
+	// cleanup data
+	res = request(t, http.MethodDelete, uri(fmt.Sprint(serverPort), fmt.Sprintf("expenses/%d", createExpense.ID)), strings.NewReader(bodyCreate))
+	// Assert
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	// teardown echo server
+	teardownServer(t, eh)
 
 }

@@ -77,29 +77,9 @@ func TestGetExpenseByIDApi(t *testing.T) {
 
 func TestGetExpensesAll(t *testing.T) {
 
-	// eh := echo.New()
-	// go func(e *echo.Echo) {
-	// 	db, err := sql.Open("postgres", "postgresql://root:root@db/go-example-db?sslmode=disable")
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-
-	// 	h := NewApplication(db)
-
-	// 	e.GET("", h.GetExpensesAll)
-	// 	e.Start(fmt.Sprintf(":%d", serverPort))
-	// }(eh)
-
-	// for {
-	// 	conn, err := net.DialTimeout("tcp", fmt.Sprintf("localhost:%d", serverPort), 30*time.Second)
-	// 	if err != nil {
-	// 		log.Println(err)
-	// 	}
-	// 	if conn != nil {
-	// 		conn.Close()
-	// 		break
-	// 	}
-	// }
+	// setup echo server
+	// eh := setupServer(t)
+	// pingServer()
 
 	// var expenses []Expense
 	// res := request(t, http.MethodGet, uri(fmt.Sprint(serverPort), "expenses"), nil)
@@ -111,4 +91,5 @@ func TestGetExpensesAll(t *testing.T) {
 	// assert.Equal(t, http.StatusOK, res.StatusCode)
 	// assert.NotEqual(t, 0, len(expenses))
 
+	// teardownServer(t, eh)
 }
