@@ -3,9 +3,5 @@ FROM golang:1.19-alpine
 # Set working directory
 WORKDIR /go/src/target
 
-# env
-ENV PORT=2565
-ENV DATABASE_URL="host=db port=5432 user=root password=root dbname=expenses sslmode=disable"
-
 # Run tests
-CMD CGO_ENABLED=0 go test --tags=integration ./...
+CMD CGO_ENABLED=0 go test --tags=integration -v ./...

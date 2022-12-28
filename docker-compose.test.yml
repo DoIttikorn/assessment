@@ -19,7 +19,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: expenses
+      POSTGRES_DB: go-example-db
     restart: on-failure
     volumes:
       - ./db:/docker-entrypoint-initdb.d/

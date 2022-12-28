@@ -42,7 +42,7 @@ func TestUpdateExpenseByIDSuccess(t *testing.T) {
 	expected := strings.TrimSpace(`{"id":7,"title":"check update","amount":1000,"note":"note","tags":["salary"]}`)
 
 	// Act
-	err = h.UpdateExpense(c)
+	err = h.UpdateExpenseByID(c)
 
 	// Assertions
 	if assert.NoError(t, err) {
@@ -74,7 +74,7 @@ func TestUpdateExpenseByIDNotFoundParamID(t *testing.T) {
 	c.SetParamValues("")
 
 	// Act
-	err = h.UpdateExpense(c)
+	err = h.UpdateExpenseByID(c)
 
 	// Assertions
 	if assert.NoError(t, err) {
@@ -107,7 +107,7 @@ func TestUpdateExpenseByIDIncorrectBody(t *testing.T) {
 	c.SetParamValues("7")
 
 	// Act
-	err = h.UpdateExpense(c)
+	err = h.UpdateExpenseByID(c)
 
 	// Assertions
 	if assert.NoError(t, err) {
@@ -140,7 +140,7 @@ func TestUpdateExpenseByIDFails(t *testing.T) {
 	c.SetParamValues("7")
 
 	// Act
-	err = h.UpdateExpense(c)
+	err = h.UpdateExpenseByID(c)
 
 	// Assertions
 	if assert.NoError(t, err) {

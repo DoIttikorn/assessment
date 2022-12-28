@@ -7,7 +7,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func (h *handler) UpdateExpense(c echo.Context) error {
+func (h *handler) UpdateExpenseByID(c echo.Context) error {
 	e := new(Expense)
 	expenseId := c.Param("id")
 	if expenseId == "" {
