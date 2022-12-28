@@ -40,7 +40,7 @@ func TestCreateExpenseApi(t *testing.T) {
 	assert.Equal(t, []string{"dodo", "learn"}, e.Tags)
 
 	// cleanup data
-	res = request(t, http.MethodDelete, uri(fmt.Sprint(serverPort), fmt.Sprintf("expenses/%d", e.ID)), strings.NewReader(body))
+	res = request(t, http.MethodDelete, uri(fmt.Sprint(serverPort), fmt.Sprintf("expenses/%d", e.ID)), nil)
 	// Assert
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 

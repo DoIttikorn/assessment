@@ -58,7 +58,7 @@ func TestUpdateExpenseByIdSuccess(t *testing.T) {
 	assert.Equal(t, update.Tags, []string{"markets", "debt"})
 
 	// cleanup data
-	res = request(t, http.MethodDelete, uri(fmt.Sprint(serverPort), fmt.Sprintf("expenses/%d", createExpense.ID)), strings.NewReader(bodyCreate))
+	res = request(t, http.MethodDelete, uri(fmt.Sprint(serverPort), fmt.Sprintf("expenses/%d", createExpense.ID)), nil)
 	// Assert
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 
