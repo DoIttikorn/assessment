@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -36,6 +35,8 @@ func setupServer(t *testing.T) *echo.Echo {
 
 		expense := NewApplication(db)
 
+		e.GET("/expenses/:id", expense.GetExpenseByID)
+		e.GET("/expenses", expense.GetExpensesAll)
 		e.POST("/expenses", expense.CreateExpense)
 		e.DELETE("/expenses/:id", expense.DeleteExpenseByID)
 
@@ -70,7 +71,7 @@ func (res *Response) Decode(v interface{}) error {
 	if res.err != nil {
 		return res.err
 	}
-	result, err := ioutil.ReadAll(res.Body)
+	result, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
