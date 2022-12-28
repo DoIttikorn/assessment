@@ -89,7 +89,6 @@ func request(t *testing.T, method, url string, body io.Reader) *Response {
 	req, err := http.NewRequest(method, url, body)
 	assert.NoError(t, err)
 
-	// req.Header.Add("Authorization", os.Getenv("AUTH_TOKEN"))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 	client := http.Client{}
